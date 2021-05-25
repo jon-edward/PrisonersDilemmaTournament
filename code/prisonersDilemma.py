@@ -98,19 +98,19 @@ args = parser.parse_args()
 
 STRATEGY_FOLDERS = [
     "exampleStrats",
-    "valadaptive",
-    "nekiwo",
-    "edward",
-    "misc",
-    "saffron",
-    "aaaa-trsh",
-    "phoenix",
-    "l4vr0v",
-    "smough",
-    "dratini0",
-    "decxjo",
-    "Nobody5050",
-    "sanscipher"
+#    "valadaptive",
+#    "nekiwo",
+#    "edward",
+#    "misc",
+#    "saffron",
+#    "aaaa-trsh",
+#    "phoenix",
+#    "l4vr0v",
+#    "smough",
+#    "dratini0",
+#    "decxjo",
+#    "Nobody5050",
+#    "sanscipher"
 ]
 #if args.use_slow:
     #STRATEGY_FOLDERS.append("slow")
@@ -336,8 +336,8 @@ def runFullPairingTournament(inFolders, outFile, summaryFile):
     rankings = np.argsort(scoresNumpy)
     invRankings = [len(rankings) - int(ranking) - 1 for ranking in np.argsort(rankings)]
 
-    with open("viewer-template.html", "r+") as t:
-        jsonStrategies = [
+    #with open("viewer-template.html", "r+") as t:
+    #    jsonStrategies = [
             {
                 "name": name,
                 "rank": rank,
@@ -346,10 +346,10 @@ def runFullPairingTournament(inFolders, outFile, summaryFile):
             }
             for (name, rank, score) in zip(STRATEGY_LIST, invRankings, scoresNumpy)
         ]
-        jsonResults = json.dumps({"results": allResults, "strategies": jsonStrategies})
-        templateStr = t.read()
-        with open(RESULTS_HTML, "w+") as out:
-            out.write(templateStr.replace("$results", jsonResults))
+    #    jsonResults = json.dumps({"results": allResults, "strategies": jsonStrategies})
+    #    templateStr = t.read()
+    #    with open(RESULTS_HTML, "w+") as out:
+    #        out.write(templateStr.replace("$results", jsonResults))
 
     mainFile.write("\n\nTOTAL SCORES\n")
     for rank in range(len(STRATEGY_LIST)):

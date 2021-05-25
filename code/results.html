@@ -8,34 +8,30 @@
   <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet" />
   <style>
   #FileDrop{
-    left:0;
+    position: relative;
+    left:5vw;
     width: 75%;
     height: 100px;
     border: 2px dashed black;
     color: white;
     margin: 20px auto;
+    width: 90vw;
   }
   #FileDrop.Hover{
     background-color: white;
     color: black;
   }
   #FileDrop input {
-    position: absolute;
-    width: 100%;
-    height: 100%;
     opacity: 0;
-    left: 0px;
-    top: 0px;
+    width:100%;
+    height:100%;
+    position: relative;
+    top: -1.75em;
   }
   #FileDrop #Text {
-    position: absolute;
-    width: 100%;
-    height: 20px;
-    line-height: 20px;
-    left: 0px;
-    top: 50%;
-    transform: translate(0, -50%);
+    position: relative;
     text-align: center;
+    top: calc(50% - 0.5em);
   }
 
     html,
@@ -170,11 +166,8 @@
       </div>
       <input type="file" accept="text/json">
     </div>
-    <div id='htmlContent' id='container'></div>
+    <div id='container'></div>
   </div>
-<script>
-var  myV = [];
-</script>
   <script type="module">
 import {
       html,
@@ -286,10 +279,6 @@ import {
           if (strategy.score > bestStrategyScore) {
             bestStrategy = strategy;
             bestStrategyScore = strategy.score;
-            console.log(`Best: ${strategy.score}`);
-          }
-          else{
-          console.log(`${strategy.score}`);
           }
         }
         viewedStrategy = bestStrategy.name;
@@ -607,11 +596,6 @@ import {
                     </table>
                 </div>
             `;
-
-      console.log(Scoreboard)
-
-
-      console.log(ResultsView)
 
       render(
         html`<${Scoreboard} /><${ResultsView} />`,

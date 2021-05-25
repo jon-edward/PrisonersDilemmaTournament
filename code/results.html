@@ -203,7 +203,6 @@ import {
     }
 
     function normalize(data){
-      myV = data;
       let strategies = [];
       let scores = [];
       let names = [];
@@ -252,11 +251,13 @@ import {
           }
         }
         strategies.push({
-          score: cscore/games,
+          rank: 0,
+          score: cscore,
+          avgScore: cscore/games,
           name: n
         });
       }
-      return [strategies, scores]
+      return [strategies.sort((a,b)=>b.score-a.score).map((a,b)=>{a.rank=b;return a}), scores]
     }
 
     function calculate(strategies, results) {

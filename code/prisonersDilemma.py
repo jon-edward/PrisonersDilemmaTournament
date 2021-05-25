@@ -113,7 +113,7 @@ STRATEGY_FOLDERS = [
     "sanscipher"
 ]
 if args.use_slow:
-    STRATEGY_FOLDERS.append("slow")
+    #STRATEGY_FOLDERS.append("slow")
 RESULTS_FILE = "results.txt"
 RESULTS_HTML = "results.html"
 RESULTS_JSON = "results.json"

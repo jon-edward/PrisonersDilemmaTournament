@@ -112,7 +112,7 @@ STRATEGY_FOLDERS = [
     "Nobody5050",
     "sanscipher"
 ]
-if args.use_slow:
+#if args.use_slow:
     #STRATEGY_FOLDERS.append("slow")
 RESULTS_FILE = "results.txt"
 RESULTS_HTML = "results.html"

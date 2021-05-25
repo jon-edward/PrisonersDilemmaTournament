@@ -338,14 +338,14 @@ def runFullPairingTournament(inFolders, outFile, summaryFile):
 
     #with open("viewer-template.html", "r+") as t:
     #    jsonStrategies = [
-            {
-                "name": name,
-                "rank": rank,
-                "score": score,
-                "avgScore": score / (len(STRATEGY_LIST) - 1),
-            }
-            for (name, rank, score) in zip(STRATEGY_LIST, invRankings, scoresNumpy)
-        ]
+    #        {
+    #            "name": name,
+    #            "rank": rank,
+    #            "score": score,
+    #            "avgScore": score / (len(STRATEGY_LIST) - 1),
+    #        }
+    #        for (name, rank, score) in zip(STRATEGY_LIST, invRankings, scoresNumpy)
+    #    ]
     #    jsonResults = json.dumps({"results": allResults, "strategies": jsonStrategies})
     #    templateStr = t.read()
     #    with open(RESULTS_HTML, "w+") as out:

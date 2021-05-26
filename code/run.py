@@ -1,19 +1,6 @@
-STRATEGY_FOLDERS = [
-    "exampleStrats",
-    "valadaptive",
-    "nekiwo",
-    "edward",
-    "misc",
-    "saffron",
-#    "aaaa-trsh",
-#    "phoenix",
-#    "l4vr0v",
-#    "smough",
-#    "dratini0",
-#    "decxjo",
-#    "Nobody5050",
-#    "sanscipher"
-]
+import os
+
+STRATEGY_FOLDERS = [p for p in os.listdir() if os.path.isdir(p)]
 CACHE_FILE = "cache.json"
 
 # Minimum rounds to run
@@ -23,7 +10,6 @@ MIN_ROUNDS = 10
 MIN_SD = 0.02
 
 import multiprocessing
-import os
 import itertools
 import importlib
 import pathlib

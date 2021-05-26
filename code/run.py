@@ -4,7 +4,7 @@ STRATEGY_FOLDERS = [p for p in os.listdir() if os.path.isdir(p)]
 CACHE_FILE = "cache.json"
 
 # Minimum rounds to run
-MIN_ROUNDS = 10
+MIN_ROUNDS = 11
 
 # Maximum Standard Deviation to keep calculating after MIN_ROUNDS
 MIN_SD = 0.02
@@ -89,7 +89,7 @@ def strategyMove(move):
         # Coerce all moves to be 0 or 1 so strategies can safely assume 0/1's only
         return int(bool(move))
 
-def runRound(pair, moduleA, moduleB):
+def runRound(moduleA, moduleB):
     memoryA = None
     memoryB = None
 
@@ -136,7 +136,7 @@ def runRounds(pair):
     allScoresB = []
     firstRoundHistory = None
     for i in range(NUM_RUNS):
-        roundHistory = runRound(pair, moduleA, moduleB)
+        roundHistory = runRound(moduleA, moduleB)
         scoresA, scoresB = tallyRoundScores(roundHistory)
         if i == 0:
             firstRoundHistory = roundHistory
@@ -165,10 +165,6 @@ def runRounds(pair):
 
     return [pair,[avgScoreA, avgScoreB, stdevA, stdevB, firstRoundHistory.tolist()]]
 
-def pool_init(l):
-    global lock
-    lock = l
-
 def loadCache():
     if args.delete_cache:
         return {}
@@ -195,7 +191,10 @@ def runFullPairingTournament(inFolders, outFile):
     for inFolder in inFolders:
         for file in os.listdir(inFolder):
             if file.endswith(".py"):
-                STRATEGY_LIST.append([f"{inFolder}.{file[:-3]}",pathlib.Path(f"{inFolder}/{file[:-3]}.py").stat().st_mtime_ns])
+                STRATEGY_LIST.append([
+                    f"{inFolder}.{file[:-3]}",
+                    f"{inFolder}.{file[:-3]},{pathlib.Path(f'{inFolder}/{file[:-3]}.py').stat().st_mtime_ns}"
+                ])
 
     if len(STRATEGY_LIST) < 2:
         raise ValueError('Not enough strategies!')
@@ -214,13 +213,13 @@ def runFullPairingTournament(inFolders, outFile):
 
     while i > 0:
         i -= 1
-        if str(combinations[i][0][0])+","+str(combinations[i][0][1]) in cache:
-            if str(combinations[i][1][0])+","+str(combinations[i][1][1]) in cache[str(combinations[i][0][0])+","+str(combinations[i][0][1])]:
+        if combinations[i][0][1] in cache:
+            if combinations[i][1][1] in cache[combinations[i][0][1]]:
                 combinations.pop(i)
                 continue
 
-        if str(combinations[i][1][0])+","+str(combinations[i][1][1]) in cache:
-            if str(combinations[i][0][0])+","+str(combinations[i][0][1]) in cache[str(combinations[i][1][0])+","+str(combinations[i][1][1])]:
+        if combinations[i][1][1] in cache:
+            if combinations[i][0][1] in cache[combinations[i][1][1]]:
                 combinations.pop(i)
 
     skippedCombinations = numCombinations-len(combinations)
@@ -230,15 +229,14 @@ def runFullPairingTournament(inFolders, outFile):
 
     progressCounter = 0
 
-    #with Pool(args.processes, initializer=pool_init, initargs=(multiprocessing.Lock(),)) as p:
     with Pool(args.processes) as p:
         for v in p.imap(runRounds, combinations):
             progressCounter += 1
             sys.stdout.write(f"\r{skippedCombinations+progressCounter}/{numCombinations} pairings ({NUM_RUNS} runs per pairing, {skippedCombinations} hits, {numCombinations-skippedCombinations} misses) {progressBar(progressCounter/(numCombinations-skippedCombinations))}")
             sys.stdout.flush()
-            if str(v[0][0][0])+","+str(v[0][0][1]) not in cache:
-                cache[str(v[0][0][0])+","+str(v[0][0][1])] = {}
-            cache[str(v[0][0][0])+","+str(v[0][0][1])][str(v[0][1][0])+","+str(v[0][1][1])] = v[1]
+            if v[0][0][1] not in cache:
+                cache[v[0][0][1]] = {}
+            cache[v[0][0][1]][v[0][1][1]] = v[1]
 
     with open(outFile, 'w') as of:
         json.dump(cache, of)
